@@ -1,6 +1,28 @@
-<!-- eslint-disable vue/multi-word-component-names -->
+<script lang="ts" setup>
+interface Task {
+	id: number;
+	title: string;
+	done: boolean;
+}
+
+const { data: tasks, error, status } = await useFetch<Task[]>("/api/tasks", {
+	lazy: true,
+});
+</script>
+
 <template>
 	<div>
-		<h1>Hello World!</h1>
+		<article
+			v-if="status === 'pending'"
+			aria-busy="true"
+		/>
+		<div v-else>
+			<article
+				v-for="task in tasks"
+				:key="task.id"
+			>
+				{{ task.title }}
+			</article>
+		</div>
 	</div>
 </template>
